@@ -250,7 +250,9 @@ void EmuThread::startVM(std::shared_ptr<VMBootParameters> boot_params)
 	if (!VMManager::Initialize(*boot_params))
 		return;
 
-	if (!Host::GetBoolSettingValue("UI", "StartPaused", false))
+	VMManager::SetState(VMState::Running);
+
+	/*if (!Host::GetBoolSettingValue("UI", "StartPaused", false))
 	{
 		// This will come back and call OnVMResumed().
 		VMManager::SetState(VMState::Running);
@@ -261,7 +263,7 @@ void EmuThread::startVM(std::shared_ptr<VMBootParameters> boot_params)
 		redrawDisplayWindow();
 		Host::OnVMPaused();
 	}
-
+	*/
 	m_event_loop->quit();
 }
 
