@@ -894,6 +894,8 @@ void SYSCALL()
 			const char* inter = (gsIsInterlaced) ? "Interlaced" : "Progressive";
 			const char* field = (gsIsFrameMode) ? "FRAME" : "FIELD";
 			std::string mode;
+			GS_VideoMode prevVideoMode = gsVideoMode;
+			
 			// Warning info might be incorrect!
 			switch (cpuRegs.GPR.n.a1.UC[0])
 			{
@@ -942,6 +944,10 @@ void SYSCALL()
 					gsSetVideoMode(GS_VideoMode::Unknown);
 			}
 			DevCon.Warning("Set GS CRTC configuration. %s %s (%s)",mode.c_str(), inter, field);
+			if (Host::GetBoolSettingValue("UI", "StartPaused", false) && prevVideoMode == GS_VideoMode::Uninitialized)
+			{
+				VMManager::SetPaused(true);
+			}
 		}
 		break;
 		case Syscall::ExecPS2:
